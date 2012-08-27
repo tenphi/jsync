@@ -1,0 +1,16 @@
+{
+  "author": "Andrey Yamanov <tenphi@gmail.com>",
+  "name": "jsync",
+  "description": "Module for sync local object variable with json file",
+  "version": "0.0.1",
+  "repository": {
+    "url": "git://github.com/tenphi/jsync.git"
+  },
+  "main": "./jsync.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}
