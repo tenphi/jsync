@@ -1,19 +1,33 @@
 fs = require 'fs'
+coffee = require 'coffee-script'
 
-module.exports = (file, interval) ->
-	obj = readJson file
+module.exports = (file, interval, context, handler) ->
+	if typeof context is 'function'
+		handler = context
+		context = undefined
+	obj = readJson file, context
+	if handler
+		obj = handler(obj) or obj
 	fs.watchFile file, {persistent: yes, interval: interval or 500}, ->
-		ext = readJson file
+		ext = readJson file, context
+		if handler
+			ext = handler(ext) or ext
 		clear obj
 		extend obj, ext
 	return obj
 
-readJson = (file) ->
+readJson = (file, context) ->
 	data = fs.readFileSync file, 'utf-8'
+	isCoffee = !!file.match /\.coffee$/
 	try
-		return eval data
+		(->
+			if isCoffee
+				return coffee.eval '(' + data + ')', {sandbox: context}
+			else
+				return eval data
+		).call context or global
 	catch e
-		console.log 'Cant\'t parse file `' + file '`'
+		console.log 'Cant\'t parse file `' + file + '`'
 		return {}
 
 clear = (obj) ->

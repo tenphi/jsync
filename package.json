@@ -2,7 +2,7 @@
   "author": "Andrey Yamanov <tenphi@gmail.com>",
   "name": "jsync",
   "description": "Module for sync local object variable with json file",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "http://github.com/tenphi/jsync",
   "repository": {
     "url": "git://github.com/tenphi/jsync.git"
