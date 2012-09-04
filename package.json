@@ -1,17 +1,22 @@
 {
   "author": "Andrey Yamanov <tenphi@gmail.com>",
   "name": "jsync",
-  "description": "Module for sync local object variable with json file",
-  "version": "0.0.2",
+  "description": "Module for sync local object variable with *.js or *.coffee file",
+  "version": "0.0.3",
   "homepage": "http://github.com/tenphi/jsync",
   "repository": {
     "url": "git://github.com/tenphi/jsync.git"
   },
   "main": "./jsync.js",
   "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "nodeunit": "*"
+  },
   "optionalDependencies": {},
   "engines": {
     "node": "*"
+  },
+  "scripts": {
+    "test": "nodeunit ./tests.js"
   }
 }
