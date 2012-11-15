@@ -87,7 +87,7 @@ module.exports =
 			obj: (test) ->
 				test.expect 3
 				counter = 0
-				obj = jsync objFileJS, 100, context, (obj) ->
+				obj = jsync objFileJS, 50, context, (err, obj) ->
 					if counter is 2
 						test.ok true
 						return
@@ -95,69 +95,69 @@ module.exports =
 						counter++
 						return
 					counter++
-					test.ok testObj2 obj
+					test.ok testObj2(obj), 'type 2-1: ' + obj
 				setTimeout ->
-					fs.writeFileSync objFileJS, exampleObjJS2, 'utf-8'
+					fs.writeFile objFileJS, exampleObjJS2, 'utf-8'
 				, 10
 				setTimeout ->
 					jsync.trigger obj
 				, 150
 				setTimeout ->
-					test.ok testObj2 obj
-					jsync.unwatch obj
+					test.ok testObj2(obj), 'type 2-2: ' + obj
+					jsync.cancel obj
 					do test.done
 				, 200
 			arr: (test) ->
 				test.expect 3
 				counter = 0
-				arr = jsync arrFileJS, 100, context, (arr) ->
+				arr = jsync arrFileJS, 50, context, (err, arr) ->
 					if counter is 2
-						test.ok testArr3 arr
+						test.ok testArr3(arr), 'type 3-1: ' + arr
 						return
 					if !counter
 						counter++
 						return
 					counter++
-					test.ok testArr2 arr
+					test.ok testArr2(arr), 'type 2: ' + arr
 				setTimeout ->
 					fs.writeFileSync arrFileJS, exampleArrJS2, 'utf-8'
-				, 10
+				, 50
 				setTimeout ->
 					jsync.trigger arr, context2
 				, 150
 				setTimeout ->
-					test.ok testArr3 arr
-					jsync.unwatch arr
+					test.ok testArr3(arr), 'type 3-2: ' + arr
+					jsync.cancel arr
 					do test.done
 				, 200
 		coffee:
 			obj: (test) ->
 				test.expect 3
 				counter = 0
-				obj = jsync objFileCS, 100, context, (obj) ->
+				obj = jsync objFileCS, 50, context, (err, obj) ->
 					if counter is 2
-						test.ok testObj3 obj
+						test.ok testObj3(obj), 'type 3-1: ' + obj
 						return
 					if !counter
 						counter++
 						return
 					counter++
-					test.ok testObj2 obj
+					test.ok testObj2(obj), 'type 2: ' + obj
 				setTimeout ->
 					fs.writeFileSync objFileCS, exampleObjCS2, 'utf-8'
-				, 10
+				, 50
 				setTimeout ->
 					jsync.trigger obj, context2
 				, 150
 				setTimeout ->
-					test.ok testObj3 obj
-					jsync.unwatch obj
+					test.ok testObj3(obj), 'type 3-2: ' + obj
+					jsync.cancel obj
 					do test.done
 				, 200
 			arr: (test) ->
 				test.expect 3
 				counter = 0
-				arr = jsync arrFileCS, 100, context, (arr) ->
+				arr = jsync arrFileCS, 50, context, (err, arr) ->
 					if counter is 2
 						test.ok true
 						return
@@ -165,22 +165,22 @@ module.exports =
 						counter++
 						return
 					counter++
-					test.ok testArr2 arr
+					test.ok testArr2(arr), 'type 2-1: ' + arr
 				setTimeout ->
 					fs.writeFileSync arrFileCS, exampleArrCS2, 'utf-8'
-				, 10
+				, 50
 				setTimeout ->
 					jsync.trigger arr
 				, 150
 				setTimeout ->
-					test.ok testArr2 arr
-					jsync.unwatch arr
+					test.ok testArr2(arr), 'type 2-2: ' + arr
+					jsync.cancel arr
 					do test.done
+					do completeTest
 				, 200
 
-setTimeout ->
+completeTest = ->
 	fs.unlinkSync objFileJS
 	fs.unlinkSync arrFileCS
 	fs.unlinkSync objFileCS
 	fs.unlinkSync arrFileJS
-, 1000

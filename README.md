@@ -1,4 +1,4 @@
-jSync - Module for sync local object variable with *.js or *.coffee file
+## jSync - Module for sync local object variable with *.js or *.coffee file
 ======
 
 ### Installation
@@ -11,7 +11,7 @@ $ npm install jsync
 
 ```javascript
 var jsync = require('jsync');
-var obj = jsync('data.json'); // also you can load *.js and *.coffee files
+var obj = jsync('data.json'); // also you can load *.js, *.cson and *.coffee files
 
 // now object will keep in sync with json-file
 ```
@@ -31,9 +31,11 @@ var obj = jsync('data.js', 100); // file check every 100ms
 }
 ```
 
+Context can only be the Object
+
 ```javascript
 context = { prop: 'value' };
-var obj = jsync('data.js', false, context);
+var obj = jsync('data.js', context);
 console.log(obj); // { someVariable: 'value' }
 ```
 
@@ -46,16 +48,22 @@ console.log(obj); // { someVariable: 'value' }
 
 ```javascript
 function handler (arr) {
-	return arr.slice(2);
+	arr.splice(2);
 }
-var obj = jsync('data.js', false, false, handler);
-console.log(obj); // [3,4]
+var obj = jsync('data.js', handler);
+console.log(obj); // [1,2]
 ```
 
-### Unwatch
+### All-in-one call
 
 ```javascript
-jsync.unwatch(obj);
+var obj = jsync(file, interval, context, handler); // all arguments are optional except `file`
+```
+
+### Cancel sync and remove watcher
+
+```javascript
+jsync.cancel(obj);
 ```
 
 ### Simple read without sync

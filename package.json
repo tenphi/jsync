@@ -2,13 +2,18 @@
   "author": "Andrey Yamanov <tenphi@gmail.com>",
   "name": "jsync",
   "description": "Module for sync local object variable with *.js or *.coffee file",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "homepage": "http://github.com/tenphi/jsync",
   "repository": {
     "url": "git://github.com/tenphi/jsync.git"
   },
   "main": "./jsync.js",
-  "dependencies": {},
+  "dependencies": {
+    "coffee-script": "1.*",
+    "js2coffee": "0.2.*",
+    "targ": "0.0.*",
+    "sourin": "0.0.*"
+  },
   "devDependencies": {
     "nodeunit": "*"
   },
