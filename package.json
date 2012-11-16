@@ -10,7 +10,7 @@
   "main": "./jsync.js",
   "dependencies": {
     "coffee-script": "1.4.0",
-    "js2coffee": "0.2.*",
+    "js2coffee": "0.2.0",
     "targ": "0.0.*",
     "sourin": "0.0.*"
   },
