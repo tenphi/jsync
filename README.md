@@ -47,7 +47,7 @@ console.log(obj); // { someVariable: 'value' }
 ```
 
 ```javascript
-function handler (arr) {
+function handler (err, arr) {
 	arr.splice(2);
 }
 var obj = jsync('data.js', handler);
