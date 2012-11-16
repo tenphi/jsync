@@ -77,3 +77,19 @@ var obj = jsync.read('data.js', context);
 ```javascript
 jsync.trigger(obj, newContext);
 ```
+
+### Save synced object to file
+
+```javascript
+var obj = jsync('data.js');
+jsync.save(obj/*, fileName, callback */); // if fileName not set it will use 'data.js'
+```
+
+function will execute asynchronously if callback is set
+
+### Run some tests
+
+```bash
+$ cd /path/to/jsync/
+$ npm test
+```

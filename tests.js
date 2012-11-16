@@ -210,6 +210,68 @@
           return setTimeout(function() {
             test.ok(testArr2(arr), 'type 2-2: ' + arr);
             jsync.cancel(arr);
+            return test.done();
+          }, 200);
+        }
+      }
+    },
+    save: {
+      js: {
+        arr: function(test) {
+          var arr, counter;
+          test.expect(3);
+          counter = 0;
+          fs.writeFileSync(arrFileJS, exampleArrJS1, 'utf-8');
+          arr = jsync(arrFileJS, 50, context, function(err, arr) {
+            if (counter) {
+              return;
+            }
+            counter++;
+            return test.ok(testArr1(arr), 'type 1: ' + arr);
+          });
+          setTimeout(function() {
+            var arr2;
+            arr.splice(0, 2, 'bar');
+            jsync.save(arr);
+            jsync.save(arr, arrFileJS + '.temp.js');
+            arr2 = jsync.read(arrFileJS + '.temp.js');
+            return test.ok(testArr3(arr2), 'type 3-1: ' + arr2);
+          }, 150);
+          return setTimeout(function() {
+            test.ok(testArr3(arr), 'type 3-2: ' + arr);
+            jsync.cancel(arr);
+            return test.done();
+          }, 200);
+        }
+      },
+      coffee: {
+        obj: function(test) {
+          var counter, obj;
+          test.expect(3);
+          counter = 0;
+          fs.writeFileSync(objFileCS, exampleObjCS1, 'utf-8');
+          obj = jsync(objFileCS, 50, context, function(err, obj) {
+            if (counter) {
+              return;
+            }
+            counter++;
+            return test.ok(testObj1(obj), 'type 1: ' + obj);
+          });
+          setTimeout(function() {
+            return fs.writeFileSync(objFileCS, exampleObjCS2, 'utf-8');
+          }, 50);
+          setTimeout(function() {
+            var obj2;
+            delete obj.prop;
+            obj.context = 'bar';
+            jsync.save(obj);
+            jsync.save(obj, objFileCS + '.temp.coffee');
+            obj2 = jsync.read(objFileCS + '.temp.coffee');
+            return test.ok(testObj3(obj2), 'type 3-1: ' + obj2);
+          }, 150);
+          return setTimeout(function() {
+            test.ok(testObj3(obj), 'type 3-2: ' + obj);
+            jsync.cancel(obj);
             test.done();
             return completeTest();
           }, 200);
@@ -222,7 +284,9 @@
     fs.unlinkSync(objFileJS);
     fs.unlinkSync(arrFileCS);
     fs.unlinkSync(objFileCS);
-    return fs.unlinkSync(arrFileJS);
+    fs.unlinkSync(arrFileJS);
+    fs.unlinkSync(objFileCS + '.temp.coffee');
+    return fs.unlinkSync(arrFileJS + '.temp.js');
   };
 
 }).call(this);

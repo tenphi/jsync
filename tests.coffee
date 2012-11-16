@@ -176,6 +176,54 @@ module.exports =
 					test.ok testArr2(arr), 'type 2-2: ' + arr
 					jsync.cancel arr
 					do test.done
+					#do completeTest
+				, 200
+	save:
+		js:
+			arr: (test) ->
+				test.expect 3
+				counter = 0
+				fs.writeFileSync arrFileJS, exampleArrJS1, 'utf-8'
+				arr = jsync arrFileJS, 50, context, (err, arr) ->
+					return if counter
+					counter++
+					test.ok testArr1(arr), 'type 1: ' + arr
+				setTimeout ->
+					arr.splice 0, 2, 'bar'
+					jsync.save arr
+					jsync.save arr, arrFileJS + '.temp.js'
+					arr2 = jsync.read arrFileJS + '.temp.js'
+					test.ok testArr3(arr2), 'type 3-1: ' + arr2
+				, 150
+				setTimeout ->
+					test.ok testArr3(arr), 'type 3-2: ' + arr
+					jsync.cancel arr
+					do test.done
+				, 200
+		coffee:
+			obj: (test) ->
+				test.expect 3
+				counter = 0
+				fs.writeFileSync objFileCS, exampleObjCS1, 'utf-8'
+				obj = jsync objFileCS, 50, context, (err, obj) ->
+					return if counter
+					counter++
+					test.ok testObj1(obj), 'type 1: ' + obj
+				setTimeout ->
+					fs.writeFileSync objFileCS, exampleObjCS2, 'utf-8'
+				, 50
+				setTimeout ->
+					delete obj.prop
+					obj.context = 'bar'
+					jsync.save obj
+					jsync.save obj, objFileCS + '.temp.coffee'
+					obj2 = jsync.read objFileCS + '.temp.coffee'
+					test.ok testObj3(obj2), 'type 3-1: ' + obj2
+				, 150
+				setTimeout ->
+					test.ok testObj3(obj), 'type 3-2: ' + obj
+					jsync.cancel obj
+					do test.done
 					do completeTest
 				, 200
 
@@ -184,3 +232,5 @@ completeTest = ->
 	fs.unlinkSync arrFileCS
 	fs.unlinkSync objFileCS
 	fs.unlinkSync arrFileJS
+	fs.unlinkSync objFileCS + '.temp.coffee'
+	fs.unlinkSync arrFileJS + '.temp.js'

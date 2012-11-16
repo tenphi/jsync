@@ -86,20 +86,26 @@ jsync.read = () ->
 		data = fs.readFileSync filePath, 'utf-8'
 		return handlePlain data
 
-jsync.save = (obj, file, handler) ->
-	{obj, file, min, handler} = targ arguments,
+jsync.save = () ->
+	{obj, file, min, callback} = targ arguments,
 		obj: Object
 		file: String
 		min: Boolean
-		handler: Function
+		callback: Function
 	if not file
-		throw 'file not set'
+		watcher = getWatcher obj
+		file = watcher.file if watcher
+	if not file
+		throw 'file of object not found'
 	filePath = getFilePath file
-	handler(obj) if handler
-	src = sourin obj
+	src = sourin obj, min
 	if isCoffeeFile filePath
 		src = js2coffee.build(src)
-	fs.writeFileSync filePath, src, 'utf-8'
+	if callback
+		fs.writeFile filePath, src, 'utf-8', callback
+	else
+		fs.writeFileSync filePath, src, 'utf-8'
+	return jsync
 	
 # store functions
 
